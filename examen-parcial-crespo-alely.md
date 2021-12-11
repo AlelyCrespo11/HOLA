@@ -116,3 +116,32 @@ summary(df)
 #### e) Realizar un gráfico que muestre las ganancias de las exportaciones de Chile por producto
 
 ## Ejercicio 4
+
+### Solucion
+
+``` r
+vector_de_elementos<-sample(1:100,10)
+m<- function(vector_de_elementos){
+  invert<-length(vector_de_elementos)
+  for(j in 1:(invert-1)){
+    for(i in 1:(invert-j)){
+      if(vector_de_elementos[i]>vector_de_elementos[i+1]){
+        itit<-vector_de_elementos[i]
+        vector_de_elementos[i]<-vector_de_elementos[i+1]
+        vector_de_elementos[i+1]<-itit
+      }
+    }
+  }
+  return(vector_de_elementos)
+}
+invertido<-m(vector_de_elementos)
+vector_de_elementos
+```
+
+    ##  [1] 79 71 62 35 89 70 17 59  5 22
+
+``` r
+invertido
+```
+
+    ##  [1]  5 17 22 35 59 62 70 71 79 89
