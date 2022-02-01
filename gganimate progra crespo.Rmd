@@ -1,0 +1,131 @@
+---
+title: "GG ANIMATE G18 ALELY CRESPO"
+author: "Alely Gabriela, Crespo Ccerhuayo"
+date: "31/1/2022"
+output: github_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# GGANIMATE
+## El paquete de gganimate se encargar de animar gráficos de ggplot2, hacerlo dinámico e interactivo. Las funciones que maneja esta librería son muchas pero en la exposición mencionamos a transition, view, enter/exit, shadow, ease_aes.
+## Para ello debemos abrir las librerias como:
+
+```{r}
+library(ggplot2)
+library(gganimate)
+library(av)
+library(gifski)
+library(gapminder)
+library(dplyr)
+```
+
+## Transition
+### Esta función esta se subdivide en varias transiciones pero las más importantes son time, reveal y state.
+##### Transition Time
+
+```{r}
+
+head(gapminder)
+p <- ggplot(data = gapminder,
+            aes(x = gdpPercap, y = lifeExp, size = pop, colour = continent)) +
+  geom_point(show.legend = FALSE, alpha = 1) + 
+  labs(x = "GDP per capita", y = "Esperanza de vida" )
+p
+
+```
+
+```{r}
+p + transition_time(year) + 
+  labs(title = "year: {frame_time}")
+
+```
+
+```{r}
+p + facet_wrap(~continent) +
+  transition_time(year) +
+  labs(title = "year: {frame_time}")
+
+```
+
+```{r}
+p + transition_time(year) +   
+  labs(title = "year:{frame_time}") + 
+  view_follow(fixed_y = TRUE)
+
+```
+
+
+```{r}
+p + transition_time(year) + 
+  labs(title = "year:{frame_time}") +
+  shadow_wake(wake_length = 0.1, alpha = FALSE)
+
+```
+##### Transition_ reveal
+
+```{r}
+head(airquality)
+
+p <- ggplot(data = airquality,
+            aes(x = Day, y = Temp, group = Month, color = factor(Month))) + 
+  geom_line() +
+  labs(x = "Dia del mes", y = "Te-mperatura") + 
+  theme(legend.position = "top")
+p
+```
+
+
+```{r}
+p + transition_reveal(Day) + 
+  labs(title = "Dia: {frame_along}")
+```
+
+
+```{r}
+p + geom_point() +
+  transition_reveal(Day)
+```
+
+##### Transition_state
+
+```{r}
+airquality
+
+mean.temp <- airquality %>%
+  group_by(Month) %>%
+  summarise(Temp = mean(Temp))
+
+mean.temp
+
+p <- ggplot(data = mean.temp, 
+            aes(x = Month, y = Temp, fill = Temp)) + 
+  geom_col()
+p
+```
+
+
+```{r}
+p + transition_states(Month, wrap = FALSE) + 
+  shadow_mark() +
+  labs(title = "mes: {closest_state}")
+
+```
+
+
+```{r}
+?mtcars
+
+p <- ggplot(data = mtcars,
+            aes(x = factor(cyl), y = mpg, fill = cyl)) + 
+  geom_boxplot()
+
+p
+```
+
+```{r}
+p + transition_states(am) + 
+  labs(title = "Transmision: {closest_state}")
+```
